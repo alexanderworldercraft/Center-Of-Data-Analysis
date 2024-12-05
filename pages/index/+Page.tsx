@@ -25,7 +25,6 @@ function getColor(type: string): string {
   return colors.get(type) || "#777";
 }
 
-// Composant principal
 const PokemonList = () => {
   const [pokemonList, setPokemonList] = useState([]);
   const [types, setTypes] = useState([]);
@@ -37,7 +36,7 @@ const PokemonList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const limit = 30;
 
-  // Récupérer la liste des Pokémon
+  // Récupérer la liste des Pokémon avec filtre global
   useEffect(() => {
     const fetchPokemons = async () => {
       setLoading(true);
@@ -50,7 +49,9 @@ const PokemonList = () => {
           offset: offset.toString(),
           with: "types",
           ...(search && { search }), // Ajoute "search" si non vide
+          ...(typeFilter && { type: typeFilter }), // Ajoute "type" si un type est sélectionné
         });
+
         const response = await fetch(
           `https://pokedex.coda.memento-dev.fr/pokemon?${params.toString()}`,
           {
@@ -60,15 +61,7 @@ const PokemonList = () => {
           }
         );
         const data = await response.json();
-
-        // Filtrer par type si un filtre est appliqué
-        const filteredData = typeFilter
-          ? data.filter((pokemon: any) =>
-              pokemon.types.some((type: any) => type.slug === typeFilter)
-            )
-          : data;
-
-        setPokemonList(filteredData);
+        setPokemonList(data);
       } catch (error) {
         console.error("Erreur lors du chargement des Pokémon :", error);
       } finally {
@@ -77,7 +70,7 @@ const PokemonList = () => {
     };
 
     fetchPokemons();
-  }, [currentPage, search, typeFilter]); // Déclenche un rechargement lorsque la page, la recherche ou le filtre changent
+  }, [currentPage, search, typeFilter]); // Recharge lorsque la page, la recherche ou le filtre changent
 
   // Récupérer la liste des types pour le filtre
   useEffect(() => {
@@ -120,18 +113,18 @@ const PokemonList = () => {
       <h1 className="text-3xl font-bold text-center mb-4">Liste des Pokémon</h1>
 
       {/* Recherche et filtre */}
-      <div className="flex justify-center mb-4">
+      <div className="flex justify-center mb-6">
         <input
           type="text"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Rechercher un Pokémon..."
-          className="border border-gray-300 rounded p-2 w-full max-w-md"
+          className="bg-black text-white border border-grey-100 shadow-lg rounded p-2 w-full max-w-md"
         />
         <select
           value={typeFilter}
           onChange={(e) => setTypeFilter(e.target.value)}
-          className="ml-2 border border-gray-300 rounded p-2"
+          className="ml-2 bg-black text-white border border-gray-100 rounded p-2"
         >
           <option value="">Tous les types</option>
           {types.map((type: any) => (
@@ -151,7 +144,7 @@ const PokemonList = () => {
             {pokemonList.map((pokemon: any) => (
               <div
                 key={pokemon.id}
-                className="p-0 h-30 overflow-x-hidden rounded-md text-center shadow-lg hover:shadow-2xl transition-shadow relative"
+                className="p-0 h-30 overflow-x-hidden rounded-lg text-center shadow-md hover:shadow-xl transition-shadow relative border border-black/50"
                 style={{
                   background: getGradient(pokemon.types),
                   color: "white",
@@ -160,7 +153,7 @@ const PokemonList = () => {
                 <img
                   src={pokemon.sprites.normal.male}
                   alt={pokemon.name}
-                  className="mx-auto mt-8"
+                  className="mx-auto mt-8 drop-shadow-lg"
                 />
                 <p className="font-bold text-lg h-full w-full bg-gradient-to-t from-stone-950/0 via-stone-950/0 via-65% to-stone-950/80 absolute bottom-0">
                   {pokemon.name}
