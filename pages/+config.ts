@@ -10,8 +10,8 @@ export default {
   Layout,
 
   // https://vike.dev/head-tags
-  title: "My Vike App",
-  description: "Demo showcasing Vike",
+  title: "Center Of Data Analysis",
+  description: "Vous travaillez pour Center Of Data Analysis (CODA, quelle originalité 😏).",
 
   extends: vikeReact,
 } satisfies Config;

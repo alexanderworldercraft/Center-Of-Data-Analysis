@@ -1,6 +1,6 @@
 import import1 from "vike-react/__internal/integration/Loading";
 import { onRenderHtml } from "vike-react/__internal/integration/onRenderHtml";
-import { L as LayoutDefault, i as import4 } from "../chunks/chunk-B-XHgJ7u.js";
+import { L as LayoutDefault, i as import4 } from "../chunks/chunk-wxyBant3.js";
 import { jsxs, jsx } from "react/jsx-runtime";
 import { useState, useEffect } from "react";
 /* empty css                       */
@@ -108,7 +108,7 @@ const PokemonList = () => {
     if (direction === "next") setCurrentPage((prev) => prev + 1);
     else if (direction === "prev" && currentPage > 1) setCurrentPage((prev) => prev - 1);
   };
-  return /* @__PURE__ */ jsxs("div", { className: "p-4", children: [
+  return /* @__PURE__ */ jsxs("div", { className: "p-4 w-full", children: [
     /* @__PURE__ */ jsx("h1", { className: "text-3xl font-bold text-center mb-4", children: "Liste des Pokémon" }),
     /* @__PURE__ */ jsxs("div", { className: "flex justify-center mb-4", children: [
       /* @__PURE__ */ jsx(
@@ -135,10 +135,10 @@ const PokemonList = () => {
       )
     ] }),
     loading ? /* @__PURE__ */ jsx("p", { className: "text-center", children: "Chargement des Pokémon..." }) : /* @__PURE__ */ jsxs("div", { children: [
-      /* @__PURE__ */ jsx("div", { className: "grid grid-cols-1 md:grid-cols-3 xl:grid-cols-5 gap-4", children: filteredPokemons.map((pokemon) => /* @__PURE__ */ jsxs(
+      /* @__PURE__ */ jsx("div", { className: "grid grid-cols-1 md:grid-cols-5 xl:grid-cols-10 gap-4", children: filteredPokemons.map((pokemon) => /* @__PURE__ */ jsxs(
         "div",
         {
-          className: "p-0 overflow-x-hidden rounded-md text-center shadow-lg hover:shadow-2xl transition-shadow relative",
+          className: "p-0 h-30 overflow-x-hidden rounded-md text-center shadow-lg hover:shadow-2xl transition-shadow relative",
           style: {
             background: getGradient(pokemon.types),
             color: "white"
@@ -152,7 +152,7 @@ const PokemonList = () => {
                 className: "mx-auto mt-8"
               }
             ),
-            /* @__PURE__ */ jsx("p", { className: "font-bold text-lg h-full w-full bg-gradient-to-t from-stone-950/0 via-stone-950/0 to-stone-950/80 absolute bottom-0", children: pokemon.name })
+            /* @__PURE__ */ jsx("p", { className: "font-bold text-lg h-full w-full bg-gradient-to-t from-stone-950/0 via-stone-950/0 via-65% to-stone-950/80 absolute bottom-0", children: pokemon.name })
           ]
         },
         pokemon.id

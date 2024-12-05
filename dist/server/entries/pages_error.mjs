@@ -1,6 +1,6 @@
 import import1 from "vike-react/__internal/integration/Loading";
 import { onRenderHtml } from "vike-react/__internal/integration/onRenderHtml";
-import { L as LayoutDefault, i as import4 } from "../chunks/chunk-B-XHgJ7u.js";
+import { L as LayoutDefault, i as import4 } from "../chunks/chunk-wxyBant3.js";
 import { jsxs, Fragment, jsx } from "react/jsx-runtime";
 import { usePageContext } from "vike-react/usePageContext";
 /* empty css                       */

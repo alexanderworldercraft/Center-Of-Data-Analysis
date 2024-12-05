@@ -90,11 +90,11 @@ const telefuncFiles = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defin
 {
   const assetsManifest = {
   "_chunk-!~{004}~.js": {
-    "file": "assets/static/layouts_style-b34a8e57.a91n6qlS.css",
+    "file": "assets/static/layouts_style-b34a8e57.BGj5OpTV.css",
     "src": "_chunk-!~{004}~.js"
   },
   "_chunk-!~{005}~.js": {
-    "file": "assets/static/layouts_tailwind-00e65532.DQBkZJ65.css",
+    "file": "assets/static/layouts_tailwind-00e65532.DhjKGINL.css",
     "src": "_chunk-!~{005}~.js"
   },
   "_chunk-!~{006}~.js": {
@@ -105,20 +105,20 @@ const telefuncFiles = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defin
     "file": "assets/chunks/chunk-25N4ygma.js",
     "name": "executeHook"
   },
-  "_chunk-BK4YcTEG.js": {
-    "file": "assets/chunks/chunk-BK4YcTEG.js",
+  "_chunk-Cyn6miOz.js": {
+    "file": "assets/chunks/chunk-Cyn6miOz.js",
     "name": "_onPageTransitionStart",
     "imports": [
       "_chunk-25N4ygma.js"
     ],
     "css": [
       "assets/static/vike-react-b64a028b.BcWtY8Ol.css",
-      "assets/static/layouts_style-b34a8e57.a91n6qlS.css",
-      "assets/static/layouts_tailwind-00e65532.DQBkZJ65.css"
+      "assets/static/layouts_style-b34a8e57.BGj5OpTV.css",
+      "assets/static/layouts_tailwind-00e65532.DhjKGINL.css"
     ]
   },
   "node_modules/vike/dist/esm/client/client-routing-runtime/entry.js": {
-    "file": "assets/entries/entry-client-routing.CeNmEJNo.js",
+    "file": "assets/entries/entry-client-routing.aIRkOu7i.js",
     "name": "entries/entry-client-routing",
     "src": "node_modules/vike/dist/esm/client/client-routing-runtime/entry.js",
     "isEntry": true,
@@ -131,41 +131,35 @@ const telefuncFiles = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defin
     ]
   },
   "virtual:vike:pageConfigValuesAll:client:/pages/_error": {
-    "file": "assets/entries/pages_error.DRTjU-dk.js",
+    "file": "assets/entries/pages_error.CFrsXySG.js",
     "name": "entries/pages/_error",
     "src": "virtual:vike:pageConfigValuesAll:client:/pages/_error",
     "isEntry": true,
     "isDynamicEntry": true,
     "imports": [
-      "_chunk-BK4YcTEG.js",
+      "_chunk-Cyn6miOz.js",
       "_chunk-25N4ygma.js"
     ],
     "css": [
       "assets/static/vike-react-b64a028b.BcWtY8Ol.css",
-      "assets/static/layouts_style-b34a8e57.a91n6qlS.css",
-      "assets/static/layouts_tailwind-00e65532.DQBkZJ65.css"
-    ],
-    "assets": [
-      "assets/static/logo.DLJJsk-H.svg"
+      "assets/static/layouts_style-b34a8e57.BGj5OpTV.css",
+      "assets/static/layouts_tailwind-00e65532.DhjKGINL.css"
     ]
   },
   "virtual:vike:pageConfigValuesAll:client:/pages/index": {
-    "file": "assets/entries/pages_index.DGshaPBE.js",
+    "file": "assets/entries/pages_index.CQGY0-Hg.js",
     "name": "entries/pages/index",
     "src": "virtual:vike:pageConfigValuesAll:client:/pages/index",
     "isEntry": true,
     "isDynamicEntry": true,
     "imports": [
-      "_chunk-BK4YcTEG.js",
+      "_chunk-Cyn6miOz.js",
       "_chunk-25N4ygma.js"
     ],
     "css": [
       "assets/static/vike-react-b64a028b.BcWtY8Ol.css",
-      "assets/static/layouts_style-b34a8e57.a91n6qlS.css",
-      "assets/static/layouts_tailwind-00e65532.DQBkZJ65.css"
-    ],
-    "assets": [
-      "assets/static/logo.DLJJsk-H.svg"
+      "assets/static/layouts_style-b34a8e57.BGj5OpTV.css",
+      "assets/static/layouts_tailwind-00e65532.DhjKGINL.css"
     ]
   }
 };
