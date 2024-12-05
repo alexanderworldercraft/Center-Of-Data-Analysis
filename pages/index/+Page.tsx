@@ -102,6 +102,18 @@ const PokemonList = () => {
     }
   };
 
+  // Gestion de la recherche
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+    setCurrentPage(1); // Réinitialiser à la première page
+  };
+
+  // Gestion du filtre
+  const handleTypeFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setTypeFilter(e.target.value);
+    setCurrentPage(1); // Réinitialiser à la première page
+  };
+
   // Gérer le changement de page
   const handlePageChange = (direction: "next" | "prev") => {
     if (direction === "next") setCurrentPage((prev) => prev + 1);
@@ -117,13 +129,13 @@ const PokemonList = () => {
         <input
           type="text"
           value={search}
-          onChange={(e) => setSearch(e.target.value)}
+          onChange={handleSearchChange}
           placeholder="Rechercher un Pokémon..."
           className="bg-black text-white border border-grey-100 shadow-lg rounded p-2 w-full max-w-md"
         />
         <select
           value={typeFilter}
-          onChange={(e) => setTypeFilter(e.target.value)}
+          onChange={handleTypeFilterChange}
           className="ml-2 bg-black text-white border border-gray-100 rounded p-2"
         >
           <option value="">Tous les types</option>
