@@ -8,7 +8,7 @@ import { Link } from "../components/Link.js";
 export default function LayoutDefault({ children }: { children: React.ReactNode }) {
   return (
     <div className={"flex flex-col"}>
-      <img id="background" src="assets/fond.jpg" />
+      <img id="background" src="../assets/fond.jpg" />
       <Sidebar>
         <div className="flex flex-row justify-between">
           <Logo />
