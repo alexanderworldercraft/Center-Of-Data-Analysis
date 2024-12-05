@@ -1,0 +1,81 @@
+{
+  "_chunk-!~{004}~.js": {
+    "file": "assets/static/layouts_style-b34a8e57.a91n6qlS.css",
+    "src": "_chunk-!~{004}~.js"
+  },
+  "_chunk-!~{005}~.js": {
+    "file": "assets/static/layouts_tailwind-00e65532.DQBkZJ65.css",
+    "src": "_chunk-!~{005}~.js"
+  },
+  "_chunk-!~{006}~.js": {
+    "file": "assets/static/vike-react-b64a028b.BcWtY8Ol.css",
+    "src": "_chunk-!~{006}~.js"
+  },
+  "_chunk-25N4ygma.js": {
+    "file": "assets/chunks/chunk-25N4ygma.js",
+    "name": "executeHook"
+  },
+  "_chunk-BK4YcTEG.js": {
+    "file": "assets/chunks/chunk-BK4YcTEG.js",
+    "name": "_onPageTransitionStart",
+    "imports": [
+      "_chunk-25N4ygma.js"
+    ],
+    "css": [
+      "assets/static/vike-react-b64a028b.BcWtY8Ol.css",
+      "assets/static/layouts_style-b34a8e57.a91n6qlS.css",
+      "assets/static/layouts_tailwind-00e65532.DQBkZJ65.css"
+    ]
+  },
+  "node_modules/vike/dist/esm/client/client-routing-runtime/entry.js": {
+    "file": "assets/entries/entry-client-routing.CeNmEJNo.js",
+    "name": "entries/entry-client-routing",
+    "src": "node_modules/vike/dist/esm/client/client-routing-runtime/entry.js",
+    "isEntry": true,
+    "imports": [
+      "_chunk-25N4ygma.js"
+    ],
+    "dynamicImports": [
+      "virtual:vike:pageConfigValuesAll:client:/pages/_error",
+      "virtual:vike:pageConfigValuesAll:client:/pages/index"
+    ]
+  },
+  "virtual:vike:pageConfigValuesAll:client:/pages/_error": {
+    "file": "assets/entries/pages_error.DRTjU-dk.js",
+    "name": "entries/pages/_error",
+    "src": "virtual:vike:pageConfigValuesAll:client:/pages/_error",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_chunk-BK4YcTEG.js",
+      "_chunk-25N4ygma.js"
+    ],
+    "css": [
+      "assets/static/vike-react-b64a028b.BcWtY8Ol.css",
+      "assets/static/layouts_style-b34a8e57.a91n6qlS.css",
+      "assets/static/layouts_tailwind-00e65532.DQBkZJ65.css"
+    ],
+    "assets": [
+      "assets/static/logo.DLJJsk-H.svg"
+    ]
+  },
+  "virtual:vike:pageConfigValuesAll:client:/pages/index": {
+    "file": "assets/entries/pages_index.DGshaPBE.js",
+    "name": "entries/pages/index",
+    "src": "virtual:vike:pageConfigValuesAll:client:/pages/index",
+    "isEntry": true,
+    "isDynamicEntry": true,
+    "imports": [
+      "_chunk-BK4YcTEG.js",
+      "_chunk-25N4ygma.js"
+    ],
+    "css": [
+      "assets/static/vike-react-b64a028b.BcWtY8Ol.css",
+      "assets/static/layouts_style-b34a8e57.a91n6qlS.css",
+      "assets/static/layouts_tailwind-00e65532.DQBkZJ65.css"
+    ],
+    "assets": [
+      "assets/static/logo.DLJJsk-H.svg"
+    ]
+  }
+}

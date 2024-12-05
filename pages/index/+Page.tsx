@@ -33,13 +33,18 @@ const PokemonList = () => {
   const [typeFilter, setTypeFilter] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // Pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const limit = 30;
+
   // Récupérer la liste des Pokémon
   useEffect(() => {
     const fetchPokemons = async () => {
       setLoading(true);
       try {
+        const offset = (currentPage - 1) * limit;
         const response = await fetch(
-          `https://pokedex.coda.memento-dev.fr/pokemon?limit=30`,
+          `https://pokedex.coda.memento-dev.fr/pokemon?limit=${limit}&offset=${offset}`,
           {
             headers: {
               Authorization: "Bearer advanced-pokedex-api-key-9sd1u98cvg4t98yi",
@@ -74,7 +79,7 @@ const PokemonList = () => {
     };
 
     fetchPokemons();
-  }, []);
+  }, [currentPage]); // Déclenche un rechargement lorsque la page change
 
   // Récupérer la liste des types pour le filtre
   useEffect(() => {
@@ -117,8 +122,14 @@ const PokemonList = () => {
     return matchesSearch && matchesType;
   });
 
+  // Gérer le changement de page
+  const handlePageChange = (direction: "next" | "prev") => {
+    if (direction === "next") setCurrentPage((prev) => prev + 1);
+    else if (direction === "prev" && currentPage > 1) setCurrentPage((prev) => prev - 1);
+  };
+
   return (
-    <div className="p-4">
+    <div className="p-4 w-full">
       <h1 className="text-3xl font-bold text-center mb-4">Liste des Pokémon</h1>
 
       {/* Recherche et filtre */}
@@ -148,24 +159,46 @@ const PokemonList = () => {
       {loading ? (
         <p className="text-center">Chargement des Pokémon...</p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-5 gap-4">
-          {filteredPokemons.map((pokemon: any) => (
-            <div
-              key={pokemon.id}
-              className="p-0 overflow-x-hidden rounded-md text-center shadow-lg hover:shadow-2xl transition-shadow relative"
-              style={{
-                background: getGradient(pokemon.types),
-                color: "white"
-              }}
+        <div>
+          <div className="grid grid-cols-1 md:grid-cols-5 xl:grid-cols-10 gap-4">
+            {filteredPokemons.map((pokemon: any) => (
+              <div
+                key={pokemon.id}
+                className="p-0 h-30 overflow-x-hidden rounded-md text-center shadow-lg hover:shadow-2xl transition-shadow relative"
+                style={{
+                  background: getGradient(pokemon.types),
+                  color: "white",
+                }}
+              >
+                <img
+                  src={pokemon.sprites.normal.male}
+                  alt={pokemon.name}
+                  className="mx-auto mt-8"
+                />
+                <p className="font-bold text-lg h-full w-full bg-gradient-to-t from-stone-950/0 via-stone-950/0 via-65% to-stone-950/80 absolute bottom-0">
+                  {pokemon.name}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          {/* Pagination */}
+          <div className="flex justify-between items-center mt-6">
+            <button
+              disabled={currentPage === 1}
+              onClick={() => handlePageChange("prev")}
+              className="bg-gray-500 text-white px-4 py-2 rounded disabled:opacity-50"
             >
-              <img
-                src={pokemon.sprites.normal.male}
-                alt={pokemon.name}
-                className="mx-auto mt-8"
-              />
-              <p className="font-bold text-lg h-full w-full bg-gradient-to-t from-stone-950/0 via-stone-950/0 to-stone-950/80 absolute bottom-0">{pokemon.name}</p>
-            </div>
-          ))}
+              Précédent
+            </button>
+            <p>Page {currentPage}</p>
+            <button
+              onClick={() => handlePageChange("next")}
+              className="bg-gray-500 text-white px-4 py-2 rounded"
+            >
+              Suivant
+            </button>
+          </div>
         </div>
       )}
     </div>
