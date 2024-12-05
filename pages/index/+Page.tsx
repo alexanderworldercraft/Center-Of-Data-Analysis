@@ -43,8 +43,16 @@ const PokemonList = () => {
       setLoading(true);
       try {
         const offset = (currentPage - 1) * limit;
+
+        // Construire la querystring
+        const params = new URLSearchParams({
+          limit: limit.toString(),
+          offset: offset.toString(),
+          with: "types",
+          ...(search && { search }), // Ajoute "search" si non vide
+        });
         const response = await fetch(
-          `https://pokedex.coda.memento-dev.fr/pokemon?limit=${limit}&offset=${offset}`,
+          `https://pokedex.coda.memento-dev.fr/pokemon?${params.toString()}`,
           {
             headers: {
               Authorization: "Bearer advanced-pokedex-api-key-9sd1u98cvg4t98yi",
@@ -53,24 +61,14 @@ const PokemonList = () => {
         );
         const data = await response.json();
 
-        // Enrichir les données avec leurs types via le slug
-        const enrichedData = await Promise.all(
-          data.map(async (pokemon: any) => {
-            const detailsResponse = await fetch(
-              `https://pokedex.coda.memento-dev.fr/pokemon/${pokemon.slug}`,
-              {
-                headers: {
-                  Authorization:
-                    "Bearer advanced-pokedex-api-key-9sd1u98cvg4t98yi",
-                },
-              }
-            );
-            const details = await detailsResponse.json();
-            return { ...pokemon, types: details.current.types };
-          })
-        );
+        // Filtrer par type si un filtre est appliqué
+        const filteredData = typeFilter
+          ? data.filter((pokemon: any) =>
+              pokemon.types.some((type: any) => type.slug === typeFilter)
+            )
+          : data;
 
-        setPokemonList(enrichedData);
+        setPokemonList(filteredData);
       } catch (error) {
         console.error("Erreur lors du chargement des Pokémon :", error);
       } finally {
@@ -79,7 +77,7 @@ const PokemonList = () => {
     };
 
     fetchPokemons();
-  }, [currentPage]); // Déclenche un rechargement lorsque la page change
+  }, [currentPage, search, typeFilter]); // Déclenche un rechargement lorsque la page, la recherche ou le filtre changent
 
   // Récupérer la liste des types pour le filtre
   useEffect(() => {
@@ -110,17 +108,6 @@ const PokemonList = () => {
       return `linear-gradient(45deg, ${colors.join(", ")})`; // Gradient pour deux types
     }
   };
-
-  // Gérer la recherche et le filtre
-  const filteredPokemons = pokemonList.filter((pokemon: any) => {
-    const matchesSearch = pokemon.name
-      .toLowerCase()
-      .includes(search.toLowerCase());
-    const matchesType = typeFilter
-      ? pokemon.types.some((type: any) => type.slug === typeFilter)
-      : true;
-    return matchesSearch && matchesType;
-  });
 
   // Gérer le changement de page
   const handlePageChange = (direction: "next" | "prev") => {
@@ -161,7 +148,7 @@ const PokemonList = () => {
       ) : (
         <div>
           <div className="grid grid-cols-1 md:grid-cols-5 xl:grid-cols-10 gap-4">
-            {filteredPokemons.map((pokemon: any) => (
+            {pokemonList.map((pokemon: any) => (
               <div
                 key={pokemon.id}
                 className="p-0 h-30 overflow-x-hidden rounded-md text-center shadow-lg hover:shadow-2xl transition-shadow relative"

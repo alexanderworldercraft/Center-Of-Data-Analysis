@@ -8,6 +8,7 @@ import { Link } from "../components/Link.js";
 export default function LayoutDefault({ children }: { children: React.ReactNode }) {
   return (
     <div className={"flex flex-col"}>
+      <img id="background" src="assets/fond.jpg" />
       <Sidebar>
         <div className="flex flex-row justify-between">
           <Logo />
@@ -25,7 +26,7 @@ export default function LayoutDefault({ children }: { children: React.ReactNode 
 
 function Sidebar({ children }: { children: React.ReactNode }) {
   return (
-    <div id="sidebar" className={"p-3 flex flex-col shrink-0 border-b-2 border-gray-950/70 sticky top-0 z-50 backdrop-blur bg-white/50 shadow-xl"}>
+    <div id="sidebar" className={"p-3 flex flex-col shrink-0 border-b-2 border-gray-950/70 sticky top-0 z-50 backdrop-blur bg-yellow/50 shadow-xl"}>
       {children}
     </div>
   );
@@ -34,7 +35,7 @@ function Sidebar({ children }: { children: React.ReactNode }) {
 function Content({ children }: { children: React.ReactNode }) {
   return (
     <div id="page-container">
-      <div id="page-content" className={"p-5 pb-12 min-h-screen"}>
+      <div id="page-content" className={"p-5 pb-12"}>
         {children}
       </div>
     </div>
