@@ -59,7 +59,7 @@ function TeamPage() {
       const detailedPokemon = await Promise.all(
         allPokemon.map((pokemon) =>
           getPokemonDetails(pokemon.slug)
-            .then((res) => ({ ...pokemon, types: res.data.current.types }))
+            .then((res) => ({ ...pokemon, sprites: res.data.current.sprites, types: res.data.current.types }))
             .catch((err) => {
               console.error(`Erreur lors de la récupération des détails pour ${pokemon.name}:`, err);
               return pokemon; // Retourner le Pokémon sans type en cas d'échec
@@ -153,22 +153,19 @@ function TeamPage() {
     };
   };
 
-  const addToTeam = (pokemon) => {
-    if (team.length < 6 && !team.some((p) => p.id === pokemon.id)) {
-      setTeam([...team, pokemon]);
+  const addToTeam = (pokemon, variant) => {
+    if (team.length < 6 && !team.some((p) => p.slug === pokemon.slug && p.variant === variant)) {
+      const selectedPokemon = { ...pokemon, variant, sprite: pokemon.sprites[variant.split("-")[0]][variant.split("-")[1]] };
+      setTeam([...team, selectedPokemon]);
     }
   };
 
-  const removeFromTeam = (pokemonId) => {
-    setTeam(team.filter((p) => p.id !== pokemonId));
+  const removeFromTeam = (pokemonSlug, variant) => {
+    setTeam(team.filter((p) => p.slug !== pokemonSlug || p.variant !== variant));
   };
 
   if (loading) {
-    return <div class="mt-6 bg-blue-500 text-white font-black w-fit mx-auto flex px-4 py-2 rounded-md shadow-md border-2 border-blue-800">
-    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-    </svg>Chargement des Pokémon...</div>;
+    return <div className="text-center py-8 text-gray-500">Chargement des Pokémon...</div>;
   }
 
   if (error) {
@@ -177,10 +174,10 @@ function TeamPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold text-center text-white mb-8">Construisez votre Équipe</h1>
+      <h1 className="text-3xl font-bold text-center drop-shadow text-white mb-8">Construisez votre Équipe</h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div>
+        <div className="lg:border-e-2 border-black lg:pe-4">
           {/* Recherche et filtre */}
           <div className="flex justify-center items-center gap-4 mb-8">
             <input
@@ -215,15 +212,39 @@ function TeamPage() {
                 <img
                   src={pokemon.sprites?.normal?.male || "https://via.placeholder.com/150"}
                   alt={pokemon.name}
-                  className="mx-auto"
+                  className="mx-auto drop-shadow"
                 />
-                <p className="text-white font-semibold">{pokemon.name}</p>
-                <button
-                  onClick={() => addToTeam(pokemon)}
-                  className="mt-2 px-4 py-2 rounded bg-blue-500 text-white hover:bg-blue-600"
-                >
-                  Ajouter à l'équipe
-                </button>
+                <p className="text-white font-semibold drop-shadow">{pokemon.name}</p>
+                <div className="flex flex-wrap justify-center gap-2 mt-2">
+                  <button
+                    onClick={() => addToTeam(pokemon, "normal-male")}
+                    className="px-2 py-1 bg-blue-500 text-black border border-black rounded"
+                    disabled={!pokemon.sprites?.normal?.male}
+                  >
+                    Normal Mâle
+                  </button>
+                  <button
+                    onClick={() => addToTeam(pokemon, "normal-female")}
+                    className="px-2 py-1 bg-blue-500 border border-black text-black rounded"
+                    disabled={!pokemon.sprites?.normal?.female}
+                  >
+                    Normal Femelle
+                  </button>
+                  <button
+                    onClick={() => addToTeam(pokemon, "shiny-male")}
+                    className="px-2 py-1 bg-yellow-500 border border-black text-black rounded"
+                    disabled={!pokemon.sprites?.shiny?.male}
+                  >
+                    Shiny Mâle
+                  </button>
+                  <button
+                    onClick={() => addToTeam(pokemon, "shiny-female")}
+                    className="px-2 py-1 bg-yellow-500 border border-black text-black rounded"
+                    disabled={!pokemon.sprites?.shiny?.female}
+                  >
+                    Shiny Femelle
+                  </button>
+                </div>
               </div>
             ))}
           </div>
@@ -233,8 +254,7 @@ function TeamPage() {
             <button
               onClick={handlePreviousPage}
               disabled={currentPage === 1}
-              className={`px-4 py-2 rounded ${currentPage === 1 ? "bg-gray-300" : "bg-blue-500 hover:bg-blue-600 text-white"
-                }`}
+              className="px-4 py-2 rounded bg-gray-300 text-gray-700"
             >
               Précédent
             </button>
@@ -242,10 +262,7 @@ function TeamPage() {
             <button
               onClick={handleNextPage}
               disabled={currentPage * itemsPerPage >= filteredPokemonList.length}
-              className={`px-4 py-2 rounded ${currentPage * itemsPerPage >= filteredPokemonList.length
-                ? "bg-gray-300"
-                : "bg-blue-500 hover:bg-blue-600 text-white"
-                }`}
+              className="px-4 py-2 rounded bg-blue-500 text-white"
             >
               Suivant
             </button>
@@ -253,22 +270,23 @@ function TeamPage() {
         </div>
 
         {/* Équipe actuelle */}
-        <div className="mt-8">
-          <h2 className="text-2xl font-bold text-gray-700">Votre Équipe</h2>
-          <div className="grid grid-cols-3 gap-4">
+        <div>
+          <h2 className="text-2xl font-bold text-white italic drop-shadow mb-4">Votre Équipe</h2>
+          <div className="grid grid-cols-2 gap-4">
             {team.map((pokemon) => (
               <div
-                key={pokemon.id}
+                key={`${pokemon.slug}-${pokemon.variant}`}
                 className="p-4 border rounded-lg shadow hover:bg-gray-100 text-center"
               >
                 <img
-                  src={pokemon.sprites?.normal?.male || "https://via.placeholder.com/150"}
+                  src={pokemon.sprite || "https://via.placeholder.com/150"}
                   alt={pokemon.name}
                   className="h-16 mx-auto"
                 />
                 <p className="text-gray-700 font-semibold">{pokemon.name}</p>
+                <span className="text-sm text-gray-500">{pokemon.variant.replace("-", " ")}</span>
                 <button
-                  onClick={() => removeFromTeam(pokemon.id)}
+                  onClick={() => removeFromTeam(pokemon.slug, pokemon.variant)}
                   className="mt-2 px-4 py-2 rounded bg-red-500 text-white hover:bg-red-600"
                 >
                   Retirer
