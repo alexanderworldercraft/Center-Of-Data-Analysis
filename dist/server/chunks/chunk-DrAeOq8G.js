@@ -10,6 +10,7 @@ function Link({ href, children }) {
 }
 function LayoutDefault({ children }) {
   return /* @__PURE__ */ jsxs("div", { className: "flex flex-col", children: [
+    /* @__PURE__ */ jsx("img", { id: "background", src: "../assets/fond.jpg" }),
     /* @__PURE__ */ jsxs(Sidebar, { children: [
       /* @__PURE__ */ jsxs("div", { className: "flex flex-row justify-between", children: [
         /* @__PURE__ */ jsx(Logo, {}),
@@ -24,10 +25,10 @@ function LayoutDefault({ children }) {
   ] });
 }
 function Sidebar({ children }) {
-  return /* @__PURE__ */ jsx("div", { id: "sidebar", className: "p-3 flex flex-col shrink-0 border-b-2 border-gray-950/70 sticky top-0 z-50 backdrop-blur bg-white/50 shadow-xl", children });
+  return /* @__PURE__ */ jsx("div", { id: "sidebar", className: "p-3 flex flex-col shrink-0 border-b-2 border-gray-950/70 sticky top-0 z-50 backdrop-blur bg-yellow/50 shadow-xl", children });
 }
 function Content({ children }) {
-  return /* @__PURE__ */ jsx("div", { id: "page-container", children: /* @__PURE__ */ jsx("div", { id: "page-content", className: "p-5 pb-12 min-h-screen", children }) });
+  return /* @__PURE__ */ jsx("div", { id: "page-container", children: /* @__PURE__ */ jsx("div", { id: "page-content", className: "p-5 pb-12", children }) });
 }
 function Logo() {
   return /* @__PURE__ */ jsx("div", { children: /* @__PURE__ */ jsx("a", { href: "/", children: /* @__PURE__ */ jsx("img", { src: "https://i.gifer.com/origin/28/2860d2d8c3a1e402e0fc8913cd92cd7a_w200.gif", width: 50, alt: "logo" }) }) });

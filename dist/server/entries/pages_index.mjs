@@ -1,8 +1,9 @@
 import import1 from "vike-react/__internal/integration/Loading";
 import { onRenderHtml } from "vike-react/__internal/integration/onRenderHtml";
-import { L as LayoutDefault, i as import4 } from "../chunks/chunk-wxyBant3.js";
+import { L as LayoutDefault, i as import4 } from "../chunks/chunk-DrAeOq8G.js";
 import { jsxs, jsx } from "react/jsx-runtime";
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useData } from "vike-react/useData";
 /* empty css                       */
 /* empty css                       */
 import "vike-react/usePageContext";
@@ -29,88 +30,26 @@ function getColor(type) {
   ]);
   return colors.get(type) || "#777";
 }
-const PokemonList = () => {
-  const [pokemonList, setPokemonList] = useState([]);
-  const [types, setTypes] = useState([]);
+function Page() {
+  const { pokemonList, types, total, currentPage } = useData();
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
   const limit = 30;
-  useEffect(() => {
-    const fetchPokemons = async () => {
-      setLoading(true);
-      try {
-        const offset = (currentPage - 1) * limit;
-        const response = await fetch(
-          `https://pokedex.coda.memento-dev.fr/pokemon?limit=${limit}&offset=${offset}`,
-          {
-            headers: {
-              Authorization: "Bearer advanced-pokedex-api-key-9sd1u98cvg4t98yi"
-            }
-          }
-        );
-        const data = await response.json();
-        const enrichedData = await Promise.all(
-          data.map(async (pokemon) => {
-            const detailsResponse = await fetch(
-              `https://pokedex.coda.memento-dev.fr/pokemon/${pokemon.slug}`,
-              {
-                headers: {
-                  Authorization: "Bearer advanced-pokedex-api-key-9sd1u98cvg4t98yi"
-                }
-              }
-            );
-            const details = await detailsResponse.json();
-            return { ...pokemon, types: details.current.types };
-          })
-        );
-        setPokemonList(enrichedData);
-      } catch (error) {
-        console.error("Erreur lors du chargement des Pokémon :", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchPokemons();
-  }, [currentPage]);
-  useEffect(() => {
-    const fetchTypes = async () => {
-      try {
-        const response = await fetch(`https://pokedex.coda.memento-dev.fr/type`, {
-          headers: {
-            Authorization: "Bearer advanced-pokedex-api-key-9sd1u98cvg4t98yi"
-          }
-        });
-        const data = await response.json();
-        setTypes(data);
-      } catch (error) {
-        console.error("Erreur lors du chargement des types :", error);
-      }
-    };
-    fetchTypes();
-  }, []);
-  const getGradient = (types2) => {
-    if (types2.length === 1) {
-      const color = getColor(types2[0].slug);
-      return color;
-    } else {
-      const colors = types2.map((type) => getColor(type.slug));
-      return `linear-gradient(45deg, ${colors.join(", ")})`;
-    }
-  };
-  const filteredPokemons = pokemonList.filter((pokemon) => {
+  const filteredPokemon = pokemonList.filter((pokemon) => {
     const matchesSearch = pokemon.name.toLowerCase().includes(search.toLowerCase());
     const matchesType = typeFilter ? pokemon.types.some((type) => type.slug === typeFilter) : true;
     return matchesSearch && matchesType;
   });
-  const handlePageChange = (direction) => {
-    if (direction === "next") setCurrentPage((prev) => prev + 1);
-    else if (direction === "prev" && currentPage > 1) setCurrentPage((prev) => prev - 1);
+  const getGradient = (types2) => {
+    if (types2.length === 1) {
+      return getColor(types2[0].slug);
+    }
+    const colors = types2.map((type) => getColor(type.slug));
+    return `linear-gradient(45deg, ${colors.join(", ")})`;
   };
   return /* @__PURE__ */ jsxs("div", { className: "p-4 w-full", children: [
     /* @__PURE__ */ jsx("h1", { className: "text-3xl font-bold text-center mb-4", children: "Liste des Pokémon" }),
-    /* @__PURE__ */ jsxs("div", { className: "flex justify-center mb-4", children: [
+    /* @__PURE__ */ jsxs("div", { className: "flex justify-center mb-6", children: [
       /* @__PURE__ */ jsx(
         "input",
         {
@@ -118,7 +57,7 @@ const PokemonList = () => {
           value: search,
           onChange: (e) => setSearch(e.target.value),
           placeholder: "Rechercher un Pokémon...",
-          className: "border border-gray-300 rounded p-2 w-full max-w-md"
+          className: "bg-black text-white border border-grey-100 shadow-lg rounded p-2 w-full max-w-md"
         }
       ),
       /* @__PURE__ */ jsxs(
@@ -126,7 +65,7 @@ const PokemonList = () => {
         {
           value: typeFilter,
           onChange: (e) => setTypeFilter(e.target.value),
-          className: "ml-2 border border-gray-300 rounded p-2",
+          className: "ml-2 bg-black text-white border border-gray-100 rounded p-2",
           children: [
             /* @__PURE__ */ jsx("option", { value: "", children: "Tous les types" }),
             types.map((type) => /* @__PURE__ */ jsx("option", { value: type.slug, children: type.name }, type.slug))
@@ -134,58 +73,92 @@ const PokemonList = () => {
         }
       )
     ] }),
-    loading ? /* @__PURE__ */ jsx("p", { className: "text-center", children: "Chargement des Pokémon..." }) : /* @__PURE__ */ jsxs("div", { children: [
-      /* @__PURE__ */ jsx("div", { className: "grid grid-cols-1 md:grid-cols-5 xl:grid-cols-10 gap-4", children: filteredPokemons.map((pokemon) => /* @__PURE__ */ jsxs(
-        "div",
-        {
-          className: "p-0 h-30 overflow-x-hidden rounded-md text-center shadow-lg hover:shadow-2xl transition-shadow relative",
-          style: {
-            background: getGradient(pokemon.types),
-            color: "white"
-          },
-          children: [
-            /* @__PURE__ */ jsx(
-              "img",
-              {
-                src: pokemon.sprites.normal.male,
-                alt: pokemon.name,
-                className: "mx-auto mt-8"
-              }
-            ),
-            /* @__PURE__ */ jsx("p", { className: "font-bold text-lg h-full w-full bg-gradient-to-t from-stone-950/0 via-stone-950/0 via-65% to-stone-950/80 absolute bottom-0", children: pokemon.name })
-          ]
+    /* @__PURE__ */ jsx("div", { className: "grid grid-cols-1 md:grid-cols-5 xl:grid-cols-10 gap-4", children: filteredPokemon.map((pokemon) => /* @__PURE__ */ jsxs(
+      "a",
+      {
+        href: `/pokemon/${pokemon.slug}`,
+        className: "group p-0 h-30 overflow-hidden rounded-lg text-center shadow-md hover:shadow-xl transition-shadow relative border border-black/50",
+        style: {
+          background: getGradient(pokemon.types),
+          color: "white"
         },
-        pokemon.id
-      )) }),
-      /* @__PURE__ */ jsxs("div", { className: "flex justify-between items-center mt-6", children: [
-        /* @__PURE__ */ jsx(
-          "button",
-          {
-            disabled: currentPage === 1,
-            onClick: () => handlePageChange("prev"),
-            className: "bg-gray-500 text-white px-4 py-2 rounded disabled:opacity-50",
-            children: "Précédent"
-          }
-        ),
-        /* @__PURE__ */ jsxs("p", { children: [
-          "Page ",
-          currentPage
-        ] }),
-        /* @__PURE__ */ jsx(
-          "button",
-          {
-            onClick: () => handlePageChange("next"),
-            className: "bg-gray-500 text-white px-4 py-2 rounded",
-            children: "Suivant"
-          }
-        )
-      ] })
+        children: [
+          /* @__PURE__ */ jsx("div", { className: "overflow-hidden", children: /* @__PURE__ */ jsx(
+            "img",
+            {
+              src: pokemon.sprites.normal.male,
+              alt: pokemon.name,
+              className: "mx-auto mt-8 drop-shadow-lg group-hover:scale-150 duration-100"
+            }
+          ) }),
+          /* @__PURE__ */ jsx("p", { className: "font-bold text-lg h-full w-full bg-gradient-to-t from-stone-950/0 via-stone-950/0 to-stone-950/80 absolute bottom-0", children: pokemon.name })
+        ]
+      },
+      pokemon.id
+    )) }),
+    /* @__PURE__ */ jsxs("div", { className: "flex justify-between items-center mt-6", children: [
+      /* @__PURE__ */ jsx(
+        "a",
+        {
+          href: `?page=${currentPage - 1}`,
+          className: `bg-gray-500 text-white px-4 py-2 rounded ${currentPage === 1 ? "opacity-50 cursor-not-allowed" : ""}`,
+          children: "Précédent"
+        }
+      ),
+      /* @__PURE__ */ jsxs("p", { children: [
+        "Page ",
+        currentPage,
+        " / ",
+        Math.ceil(total / limit)
+      ] }),
+      /* @__PURE__ */ jsx(
+        "a",
+        {
+          href: `?page=${currentPage + 1}`,
+          className: `bg-gray-500 text-white px-4 py-2 rounded ${currentPage * limit >= total ? "opacity-50 cursor-not-allowed" : ""}`,
+          children: "Suivant"
+        }
+      )
     ] })
   ] });
-};
+}
 const import5 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
   __proto__: null,
-  default: PokemonList
+  default: Page
+}, Symbol.toStringTag, { value: "Module" }));
+const data = async ({ queryParams }) => {
+  const limit = 30;
+  const currentPage = parseInt((queryParams == null ? void 0 : queryParams.page) || "1", 10);
+  if (isNaN(currentPage) || currentPage < 1) {
+    throw new Error(`Invalid page parameter: ${queryParams == null ? void 0 : queryParams.page}`);
+  }
+  const offset = (currentPage - 1) * limit;
+  const pokemonResponse = await fetch(
+    `https://pokedex.coda.memento-dev.fr/pokemon?limit=${limit}&offset=${offset}&with=types`,
+    {
+      headers: {
+        Authorization: "Bearer advanced-pokedex-api-key-9sd1u98cvg4t98yi"
+      }
+    }
+  );
+  const pokemonList = await pokemonResponse.json();
+  const typesResponse = await fetch(`https://pokedex.coda.memento-dev.fr/type`, {
+    headers: {
+      Authorization: "Bearer advanced-pokedex-api-key-9sd1u98cvg4t98yi"
+    }
+  });
+  const types = await typesResponse.json();
+  const total = parseInt(pokemonResponse.headers.get("X-Total-Count") || "0", 10);
+  return {
+    pokemonList,
+    types,
+    total,
+    currentPage
+  };
+};
+const import6 = /* @__PURE__ */ Object.freeze(/* @__PURE__ */ Object.defineProperty({
+  __proto__: null,
+  data
 }, Symbol.toStringTag, { value: "Module" }));
 const configValuesSerialized = {
   ["isClientRuntimeLoaded"]: {
@@ -241,7 +214,7 @@ const configValuesSerialized = {
     definedAtData: { "filePathToShowToUser": "/pages/+config.ts", "fileExportPathToShowToUser": ["default", "title"] },
     valueSerialized: {
       type: "js-serialized",
-      value: "My Vike App"
+      value: "Center Of Data Analysis"
     }
   },
   ["description"]: {
@@ -249,7 +222,7 @@ const configValuesSerialized = {
     definedAtData: { "filePathToShowToUser": "/pages/+config.ts", "fileExportPathToShowToUser": ["default", "description"] },
     valueSerialized: {
       type: "js-serialized",
-      value: "Demo showcasing Vike"
+      value: "Vous travaillez pour Center Of Data Analysis (CODA, quelle originalité 😏)."
     }
   },
   ["Page"]: {
@@ -258,6 +231,14 @@ const configValuesSerialized = {
     valueSerialized: {
       type: "plus-file",
       exportValues: import5
+    }
+  },
+  ["data"]: {
+    type: "standard",
+    definedAtData: { "filePathToShowToUser": "/pages/index/+data.ts", "fileExportPathToShowToUser": [] },
+    valueSerialized: {
+      type: "plus-file",
+      exportValues: import6
     }
   }
 };
