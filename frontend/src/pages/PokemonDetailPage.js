@@ -95,7 +95,7 @@ function PokemonDetailPage() {
   }
 
   return (
-    <div className="container mx-auto py-8">
+    <div className="container mx-auto px-4 py-8">
       <h1 className="text-4xl font-bold text-center text-white">{pokemon.name}</h1>
 
       {/* Image et types */}
@@ -121,30 +121,36 @@ function PokemonDetailPage() {
         </div>
 
         {/* Boutons pour changer l'image */}
-        <div className="flex gap-2 mt-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-4">
           <button
             onClick={() => changeImage("normal-male")}
-            className="px-4 py-2 bg-blue-500 text-white border border-black shadow-md rounded hover:bg-blue-600"
+            className="px-4 py-2 text-black border border-black shadow-md rounded hover:bg-blue-600 bg-blue-500"
           >
             Normal Mâle
           </button>
           <button
             onClick={() => changeImage("normal-female")}
-            className="px-4 py-2 bg-blue-500 text-white border border-black shadow-md rounded hover:bg-blue-600"
             disabled={!pokemon.sprites?.normal?.female}
+            className={`px-4 py-2 text-black border border-black shadow-md rounded ${!pokemon.sprites?.normal?.female
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-blue-500 hover:bg-blue-600"
+              }`}
           >
             Normal Femelle
           </button>
           <button
             onClick={() => changeImage("shiny-male")}
-            className="px-4 py-2 bg-yellow-500 text-white border border-black shadow-md rounded hover:bg-yellow-600"
+            className="px-4 py-2 text-black border border-black shadow-md rounded hover:bg-yellow-600 bg-yellow-500"
           >
             Shiny Mâle
           </button>
           <button
             onClick={() => changeImage("shiny-female")}
-            className="px-4 py-2 bg-yellow-500 text-white border border-black shadow-md rounded hover:bg-yellow-600"
             disabled={!pokemon.sprites?.shiny?.female}
+            className={`px-4 py-2 text-black border border-black shadow-md rounded ${!pokemon.sprites?.shiny?.female
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-yellow-500 hover:bg-yellow-600"
+              }`}
           >
             Shiny Femelle
           </button>
@@ -160,21 +166,21 @@ function PokemonDetailPage() {
             return (
               <div
                 key={stat.slug}
-                className="p-4 bg-gray-100 rounded-md shadow-md relative overflow-hidden"
+                className="p-4 bg-gray-950 rounded-md border-2 border-gray-950 shadow-md relative overflow-hidden"
               >
                 <div
                   style={{
                     width: `${percentage}%`,
-                    backgroundColor: "#4caf50", // Couleur du remplissage
+                    backgroundColor: "#b91c1c", // Couleur du remplissage
                     height: "100%",
                     position: "absolute",
                     top: 0,
                     left: 0,
                     zIndex: 0,
-                    opacity: 0.7,
+                    opacity: 1,
                   }}
                 ></div>
-                <div className="flex justify-between relative z-10">
+                <div className="flex justify-between relative z-10 text-white">
                   <span className="italic">{stat.name}</span>
                   <span className="font-bold italic">{stat.base_stat}</span>
                 </div>
