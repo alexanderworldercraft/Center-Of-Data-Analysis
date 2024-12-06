@@ -1,6 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { getPokemonList, getPokemonDetails } from "../services/api";
 import axios from "axios";
+import { Radar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend,
+} from "chart.js";
+
+ChartJS.register(RadialLinearScale, PointElement, LineElement, Filler, Tooltip, Legend);
 
 // Fonction pour obtenir la couleur selon le type
 function getColor(type) {
@@ -153,19 +165,144 @@ function TeamPage() {
     };
   };
 
-  const addToTeam = (pokemon, variant) => {
-    if (team.length < 6 && !team.some((p) => p.slug === pokemon.slug && p.variant === variant)) {
-      const selectedPokemon = { ...pokemon, variant, sprite: pokemon.sprites[variant.split("-")[0]][variant.split("-")[1]] };
-      setTeam([...team, selectedPokemon]);
+  const addToTeam = async (pokemon, variant) => {
+    if (team.length >= 6) {
+      console.warn("Équipe complète !");
+      return;
     }
-  };
+  
+    if (team.some((p) => p.slug === pokemon.slug && p.variant === variant)) {
+      console.warn(`${pokemon.name} (${variant}) est déjà dans l'équipe.`);
+      return;
+    }
+  
+    try {
+      console.log(`Récupération des détails pour ${pokemon.name} (${variant})...`);
+      const response = await getPokemonDetails(pokemon.slug);
+      const stats = response.data.current.stats;
+  
+      if (!stats || !Array.isArray(stats)) {
+        console.warn(`Aucune statistique trouvée pour ${pokemon.name}`);
+        return;
+      }
+  
+      console.log(`Statistiques récupérées pour ${pokemon.name}:`, stats);
+  
+      const selectedPokemon = {
+        ...pokemon,
+        stats,
+        variant,
+        sprite: pokemon.sprites[variant.split("-")[0]][variant.split("-")[1]],
+      };
+  
+      setTeam((prevTeam) => [...prevTeam, selectedPokemon]);
+      console.log(`Équipe mise à jour:`, [...team, selectedPokemon]);
+    } catch (error) {
+      console.error(`Erreur lors de la récupération des détails pour ${pokemon.name}:`, error);
+    }
+  };   
 
   const removeFromTeam = (pokemonSlug, variant) => {
     setTeam(team.filter((p) => p.slug !== pokemonSlug || p.variant !== variant));
   };
 
+  const [averageStats, setAverageStats] = useState({
+  hp: 0,
+  attack: 0,
+  defense: 0,
+  "special-attack": 0,
+  "special-defense": 0,
+  speed: 0,
+});
+
+useEffect(() => {
+  const calculateAverageStats = () => {
+    const stats = { hp: 0, attack: 0, defense: 0, "special-attack": 0, "special-defense": 0, speed: 0 };
+
+    if (team.length === 0) return stats;
+
+    team.forEach((pokemon) => {
+      if (pokemon.stats && Array.isArray(pokemon.stats)) {
+        pokemon.stats.forEach((stat) => {
+          if (stat.slug in stats) {
+            stats[stat.slug] += stat.base_stat;
+          }
+        });
+      }
+    });
+
+    Object.keys(stats).forEach((key) => {
+      stats[key] = Math.round(stats[key] / team.length);
+    });
+
+    return stats;
+  };
+
+  setAverageStats(calculateAverageStats());
+}, [team]);
+
+
+const radarOptions = {
+  responsive: true,
+  scales: {
+    r: {
+      angleLines: {
+        display: true, // Lignes d'angle visibles
+      },
+      suggestedMin: 0, // Valeur minimale
+      suggestedMax: 255, // Valeur maximale
+      ticks: {
+        stepSize: 50, // Pas entre chaque tick
+        backdropColor: "transparent", // Supprimer le fond derrière les ticks
+      },
+      grid: {
+        color: "rgba(0, 0, 0, 1)", // Couleur des lignes de la grille
+      },
+      pointLabels: {
+        font: {
+          size: 14, // Taille des étiquettes
+          family: "Arial", // Police des étiquettes
+        },
+        color: "#000", // Couleur des étiquettes
+      },
+    },
+  },
+  plugins: {
+    legend: {
+      display: true,
+      labels: {
+        color: "#000", // Couleur des légendes
+      },
+    },
+  },
+};
+
+const radarData = {
+  labels: ["PV", "Attaque", "Défense", "Attaque Spéciale", "Défense Spéciale", "Vitesse"],
+  datasets: [
+    {
+      label: "Moyenne des statistiques",
+      data: [
+        averageStats.hp,
+        averageStats.attack,
+        averageStats.defense,
+        averageStats["special-attack"],
+        averageStats["special-defense"],
+        averageStats.speed,
+      ],
+      backgroundColor: "rgba(75, 192, 192, 0.2)",
+      borderColor: "rgba(75, 192, 192, 1)",
+      borderWidth: 2,
+    },
+  ],
+};  
+
   if (loading) {
-    return <div className="text-center py-8 text-gray-500">Chargement des Pokémon...</div>;
+    return <div class="mt-6 bg-blue-500 text-white font-black w-fit mx-auto flex px-4 py-2 rounded-md shadow-md border-2 border-blue-800">
+      <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>Chargement des Pokémon...</div>;
   }
 
   if (error) {
@@ -185,12 +322,12 @@ function TeamPage() {
               placeholder="Rechercher un Pokémon par nom..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-          className="border rounded-md border-white bg-black text-white px-4 py-2 w-full max-w-md"
+              className="border rounded-md border-white bg-black text-white px-4 py-2 w-full max-w-md"
             />
             <select
               value={selectedType}
               onChange={handleTypeChange}
-          className="border border-white bg-black text-white rounded-md px-4 py-2"
+              className="border border-white bg-black text-white rounded-md px-4 py-2"
             >
               <option value="">Tous les types</option>
               {types.map((type) => (
@@ -294,6 +431,10 @@ function TeamPage() {
               </div>
             ))}
             {team.length === 0 && <p className="text-gray-500 text-center">Aucun Pokémon dans l'équipe.</p>}
+          </div>
+          <div className="mt-8">
+            <h2 className="text-2xl font-bold mb-4 text-center">Moyenne des statistiques de l'équipe</h2>
+            <Radar data={radarData} options={radarOptions} />
           </div>
         </div>
       </div>
