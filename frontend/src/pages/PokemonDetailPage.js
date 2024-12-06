@@ -1,0 +1,106 @@
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { getPokemonDetails } from "../services/api";
+
+function PokemonDetailPage() {
+  const { slug } = useParams(); // Récupérer le slug depuis l'URL
+  const [pokemon, setPokemon] = useState(null); // Détails du Pokémon actuel
+  const [previousPokemon, setPreviousPokemon] = useState(null); // Détails du Pokémon précédent
+  const [nextPokemon, setNextPokemon] = useState(null); // Détails du Pokémon suivant
+  const [loading, setLoading] = useState(true); // Chargement
+  const [error, setError] = useState(null); // Gestion des erreurs
+
+  // Charger les détails du Pokémon
+  useEffect(() => {
+    setLoading(true);
+    setError(null);
+
+    getPokemonDetails(slug)
+      .then((response) => {
+        setPokemon(response.data.current); // Extraire le Pokémon actuel
+        setPreviousPokemon(response.data.previous); // Extraire le Pokémon précédent
+        setNextPokemon(response.data.next); // Extraire le Pokémon suivant
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Erreur lors de la récupération des détails :", err);
+        setError("Impossible de charger les détails du Pokémon.");
+        setLoading(false);
+      });
+  }, [slug]);
+
+  if (loading) {
+    return <div className="text-center py-8 text-gray-500">Chargement...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center text-red-500 py-8">{error}</div>;
+  }
+
+  if (!pokemon) {
+    return <div className="text-center text-gray-500">Aucun détail disponible.</div>;
+  }
+
+  return (
+    <div className="container mx-auto py-8">
+      <h1 className="text-4xl font-bold text-center text-blue-600">{pokemon.name}</h1>
+      
+      {/* Image et types */}
+      <div className="flex flex-col items-center mt-6">
+        <img
+          src={pokemon.sprites?.normal?.male || "https://via.placeholder.com/150"}
+          alt={pokemon.name}
+          className="h-40 w-40"
+        />
+        <div className="flex gap-2 mt-4">
+          {pokemon.types?.map((type) => (
+            <span
+              key={type.slug}
+              className="px-4 py-1 bg-blue-500 text-white rounded-full"
+            >
+              {type.name}
+            </span>
+          )) || <span className="text-gray-500">Types non disponibles</span>}
+        </div>
+      </div>
+
+      {/* Statistiques */}
+      <div className="mt-8">
+        <h2 className="text-2xl font-bold">Statistiques</h2>
+        <div className="grid grid-cols-2 gap-4 mt-4">
+          {pokemon.stats?.map((stat) => (
+            <div
+              key={stat.slug}
+              className="flex justify-between p-4 bg-gray-100 rounded shadow"
+            >
+              <span>{stat.name}</span>
+              <span className="font-bold">{stat.base_stat}</span>
+            </div>
+          )) || <span className="text-gray-500">Statistiques non disponibles</span>}
+        </div>
+      </div>
+
+      {/* Navigation vers les autres Pokémon */}
+      <div className="mt-8 flex justify-between">
+        {previousPokemon && (
+          <a
+            href={`/pokemon/${previousPokemon.slug}`}
+            className="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
+            ← {previousPokemon.name}
+          </a>
+        )}
+        {nextPokemon && (
+          <a
+            href={`/pokemon/${nextPokemon.slug}`}
+            className="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
+            {nextPokemon.name} →
+          </a>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default PokemonDetailPage;

@@ -1,62 +1,299 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="fr">
 <head>
-    <link rel="stylesheet" type="text/css" href="/node_modules/vike-react/dist/integration/styles.css?direct">
-    <link rel="stylesheet" type="text/css" href="/layouts/style.css?direct">
-    <link rel="stylesheet" type="text/css" href="/layouts/tailwind.css?direct">
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *,
+::before,
+::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-    <title>My Vike App</title>
-    <meta property="og:title" content="My Vike App" />
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <link rel="icon" href="/assets/logo.svg" />
+body {
+    background-color: wheat;
+    color: white;
+    font-family: "Comic Neue", sans-serif;
+    font-weight: bold;
+    width: 100%;
+}
 
-    <meta name="description" content="Demo showcasing Vike" />
-    <meta property="og:description" content="Demo showcasing Vike" />
+section {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+}
 
+.search {
+    align-items: end;
+    color: black;
+    display: flex;
+    height: 10dvh;
+    justify-content: center;
+    margin-bottom: 30px;
+    width: 50%;
+}
 
+form {
+    align-items: center;
+    display: flex;
+    justify-content: space-evenly;
+    min-width: 350px;
+    width: 40%;
+}
+
+form input {
+    border: 1px solid black;
+    border-radius: 50px;
+    height: 25px;
+    text-align: center;
+    width: 45%;
+}
+
+form input:focus {
+    outline: none;
+}
+
+form button {
+    align-items: center;
+    background: none;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.search img {
+    height: 25px;
+    width: 25px;
+}
+
+.pokemon-card {
+    height: 100dvh;
+    width: 100%;
+}
+
+.container {
+    background-color: #2b292c;
+    border: 1px solid black;
+    border-radius: 15px;
+    box-shadow: 3px 3px 10px 3px rgba(0, 0, 0, 0.582);
+    height: 56%;
+    margin: auto;
+    max-height: 500px;
+    min-height: 500px;
+    width: 280px;
+}
+
+.background-picture {
+    align-items: center;
+    border-radius: 15px;
+    display: flex;
+    height: 30%;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+    width: 97%;
+}
+
+.background-picture>img {
+    border-radius: 15px;
+    height: 100%;
+    position: absolute;
+}
+
+.pokemon-number {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    z-index: 40;
+}
+
+.caracteristiques {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    height: 40%;
+    justify-content: space-around;
+    margin: auto;
+    width: 97%;
+}
+
+.name {
+    font-size: 1.3em;
+    text-align: center;
+    width: 100%;
+}
+
+.types {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.type {
+    align-items: center;
+    background-color: #8fb0c5;
+    border-radius: 10px;
+    box-shadow: 1px 1px 5px #747474, -1px -1px 3px #747474;
+    color: rgb(0, 0, 0);
+    display: flex;
+    font-size: 0.9em;
+    height: 20px;
+    justify-content: center;
+    text-align: center;
+    width: 40%;
+}
+
+.container-weight-height {
+    align-items: center;
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.weight .height {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    height: 40px;
+    justify-content: center;
+    width: 50%;
+}
+
+.wtwo {
+    font-size: 0.8em;
+    margin: 0;
+    text-align: center;
+}
+
+.all-stats {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.title-stat {
+    margin-bottom: 10px;
+    text-align: center;
+    text-decoration: underline;
+    width: 100%;
+}
+
+.stats {
+    align-items: center;
+    display: flex;
+    font-size: 0.7em;
+    height: 20px;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.stats>p {
+    font-size: 1.4em;
+    margin-left: 10px;
+    width: 10%;
+}
+
+.barre {
+    background-color: white;
+    border-radius: 20px;
+    color: black;
+    width: 70%;
+}
+
+.barre>div {
+    border-radius: 20px;
+    padding: 1px;
+    text-align: center;
+}
+
+.hp {
+    background-color: #d53945;
+    width: 56%;
+}
+
+.atk {
+    background-color: #ffa625;
+    width: 68%;
+}
+
+.def {
+    background-color: #0191ea;
+    width: 21%;
+}
+
+.spd {
+    background-color: #90afc5;
+    width: 68%;
+}
+
+.exp {
+    background-color: #378e3b;
+    width: 29%;
+}
+    </style>
 </head>
-
 <body>
-
-    <div id="root">
-        <div class="flex max-w-5xl m-auto">
-            <div id="sidebar" class="p-5 flex flex-col shrink-0 border-r-2 border-r-gray-200">
-                <div class="p-5 mb-2"><a href="/"><img src="/assets/logo.svg" height="64" width="64" alt="logo" /></a>
-                </div><a href="/" class="is-active">Welcome</a><a href="/todo">Todo</a><a href="/star-wars">Data
-                    Fetching</a>
-            </div>
-            <div id="page-container">
-                <div id="page-content" class="p-5 pb-12 min-h-screen">
-                    <div class="p-4">
-                        <h1 class="text-3xl font-bold text-center mb-4">Liste des Pokémon</h1>
-                        <div class="flex justify-center mb-4"><input type="text" placeholder="Rechercher un Pokémon..."
-                                class="border border-gray-300 rounded p-2" value="" /><select
-                                class="ml-2 border border-gray-300 rounded p-2">
-                                <option value="" selected="">Tous les types</option>
-                                <option value="fire">Feu</option>
-                                <option value="water">Eau</option>
-                                <option value="grass">Plante</option>
-                            </select></div>
-                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script id="vike_pageContext"
-        type="application/json">{"_configFromHook":"!undefined","$$typeof":"!undefined","abortReason":"!undefined","_urlRewrite":null,"_urlRedirect":"!undefined","abortStatusCode":"!undefined","_abortCall":"!undefined","_pageContextInitIsPassedToClient":"!undefined","pageId":"/pages/index","routeParams":{},"data":"!undefined"}</script>
-    <script type="module" async>
-        import RefreshRuntime from "/@react-refresh"
-        RefreshRuntime.injectIntoGlobalHook(window)
-        window.$RefreshReg$ = () => { }
-        window.$RefreshSig$ = () => (type) => type
-        window.__vite_plugin_react_preamble_installed__ = true
-        import "/@vite/client";
-        import "/@fs/home/alexander/Documents/Professionnel/React/Center-Of-Data-Analysis/node_modules/vike/dist/esm/client/client-routing-runtime/entry.js";
-    </script>
+    <div class="pokemon-card">
+		<div class="container">
+			<div class="background-picture">
+				<div class="pokemon-number">#undefined</div>
+				<img src="https://raw.githubusercontent.com/Yarkis01/TyraDex/images/sprites/6/regular.png" alt="photo of charizard" id="pokeImg">
+			</div>
+			<div class="caracteristiques">
+				<div class="name">
+					<p id="pokeName">Dracaufeu</p>
+				</div>
+				<div class="types">
+					<div class="type one" id="type-1" style="width: 40%;">Feu</div>
+					<div class="type two" id="type-2" style="display: initial;">Vol</div>
+				</div>
+				<div class="container-weight-height">
+					<div class="weight">
+						<p id="pokeWeight">90,5 kg</p>
+						<p class="wtwo">Weight</p>
+					</div>
+					<div class="height">
+						<p class="wone" id="pokeHeight">1,7 m</p>
+						<p class="wtwo">Height</p>
+					</div>
+				</div>
+			</div>
+			<div class="all-stats">
+				<div class="title-stat">
+					<p>Base Stats</p>
+				</div>
+				<div class="stats">
+					<p>HP</p>
+					<div class="barre">
+						<div class="hp" style="width: 28%;"><span id="hp">78</span>/300</div>
+					</div>
+				</div>
+				<div class="stats">
+					<p>ATK</p>
+					<div class="barre">
+						<div class="atk" style="width: 28%;"><span id="atk">84</span>/300</div>
+					</div>
+				</div>
+				<div class="stats">
+					<p>DEF</p>
+					<div class="barre">
+						<div class="def" style="width: 26%;"><span id="def">78</span>/300</div>
+					</div>
+				</div>
+				<div class="stats">
+					<p>SPD</p>
+					<div class="barre">
+						<div class="spd" style="width: 33%;"><span id="spd">100</span>/300</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
-
 </html>
