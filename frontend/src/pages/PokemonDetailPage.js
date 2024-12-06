@@ -126,15 +126,32 @@ function PokemonDetailPage() {
       <div className="mt-8">
         <h2 className="text-2xl font-bold">Statistiques</h2>
         <div className="grid grid-cols-2 gap-4 mt-4">
-          {pokemon.stats?.map((stat) => (
-            <div
-              key={stat.slug}
-              className="flex justify-between p-4 bg-gray-100 rounded shadow"
-            >
-              <span>{stat.name}</span>
-              <span className="font-bold">{stat.base_stat}</span>
-            </div>
-          )) || <span className="text-gray-500">Statistiques non disponibles</span>}
+          {pokemon.stats?.map((stat) => {
+            const percentage = (stat.base_stat / 255) * 100; // Calculer le pourcentage
+            return (
+              <div
+                key={stat.slug}
+                className="p-4 bg-gray-100 rounded shadow relative"
+              >
+                <div
+                  style={{
+                    width: `${percentage}%`,
+                    backgroundColor: "#4caf50", // Couleur du remplissage
+                    height: "100%",
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    zIndex: 0,
+                    opacity: 0.7,
+                  }}
+                ></div>
+                <div className="flex justify-between relative z-10">
+                  <span>{stat.name}</span>
+                  <span className="font-bold">{stat.base_stat}</span>
+                </div>
+              </div>
+            );
+          }) || <span className="text-gray-500">Statistiques non disponibles</span>}
         </div>
       </div>
 
