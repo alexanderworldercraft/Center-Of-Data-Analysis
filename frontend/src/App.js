@@ -9,7 +9,7 @@ function App() {
   return (
     <Router>
       <Navbar />
-      <div className="min-h-screen bg-gray-50">
+      <div>
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/pokemon/:slug" element={<PokemonDetailPage />} />

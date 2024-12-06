@@ -165,7 +165,7 @@ function HomePage() {
 
   return (
     <div className="container mx-auto py-8">
-      <h1 className="text-3xl font-bold text-center text-blue-600">Pokédex</h1>
+      <h1 className="text-3xl font-bold text-center text-white mb-6">Pokédex</h1>
 
       {/* Barre de recherche */}
       <div className="flex justify-center items-center gap-4 mb-8">
@@ -174,12 +174,12 @@ function HomePage() {
           placeholder="Rechercher un Pokémon par nom..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="border rounded px-4 py-2 w-full max-w-md"
+          className="border rounded-md border-white bg-black text-white px-4 py-2 w-full max-w-md"
         />
         <select
           value={selectedType}
           onChange={handleTypeChange}
-          className="border rounded px-4 py-2"
+          className="border border-white bg-black text-white rounded-md px-4 py-2"
         >
           <option value="">Tous les types</option>
           {types.map((type) => (
@@ -191,18 +191,18 @@ function HomePage() {
       </div>
 
       {/* Affichage des Pokémon */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-4 m-4">
         {paginatedPokemon.map((pokemon) => (
           <a
             key={pokemon.slug}
             href={`/pokemon/${pokemon.slug}`}
-            className="p-4 text-center rounded shadow hover:bg-gray-100"
+            className="p-4 text-center border border-black rounded-lg shadow-lg"
             style={getBackgroundStyle(pokemon.types)} // Appliquer le style de fond
           >
             <img
               src={pokemon.sprites?.normal?.male || "https://via.placeholder.com/150"}
               alt={pokemon.name}
-              className="h-16 mx-auto"
+              className="mx-auto drop-shadow-2xl"
             />
             <p className="text-white font-semibold">{pokemon.name}</p>
           </a>

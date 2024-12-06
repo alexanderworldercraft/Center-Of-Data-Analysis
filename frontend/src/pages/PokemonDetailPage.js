@@ -71,7 +71,7 @@ function PokemonDetailPage() {
 
   return (
     <div className="container mx-auto py-8">
-      <h1 className="text-4xl font-bold text-center text-blue-600">{pokemon.name}</h1>
+      <h1 className="text-4xl font-bold text-center text-white">{pokemon.name}</h1>
 
       {/* Image et types */}
       <div className="flex flex-col items-center mt-6">
@@ -95,26 +95,26 @@ function PokemonDetailPage() {
         <div className="flex gap-2 mt-4">
           <button
             onClick={() => changeImage("normal-male")}
-            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            className="px-4 py-2 bg-blue-500 text-white border border-black rounded hover:bg-blue-600"
           >
             Normal Mâle
           </button>
           <button
             onClick={() => changeImage("normal-female")}
-            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            className="px-4 py-2 bg-blue-500 text-white border border-black rounded hover:bg-blue-600"
             disabled={!pokemon.sprites?.normal?.female}
           >
             Normal Femelle
           </button>
           <button
             onClick={() => changeImage("shiny-male")}
-            className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+            className="px-4 py-2 bg-yellow-500 text-white border border-black rounded hover:bg-yellow-600"
           >
             Shiny Mâle
           </button>
           <button
             onClick={() => changeImage("shiny-female")}
-            className="px-4 py-2 bg-yellow-500 text-white rounded hover:bg-yellow-600"
+            className="px-4 py-2 bg-yellow-500 text-white border border-black rounded hover:bg-yellow-600"
             disabled={!pokemon.sprites?.shiny?.female}
           >
             Shiny Femelle
@@ -131,7 +131,7 @@ function PokemonDetailPage() {
             return (
               <div
                 key={stat.slug}
-                className="p-4 bg-gray-100 rounded shadow relative"
+                className="p-4 bg-gray-100 rounded-md shadow-md relative overflow-hidden"
               >
                 <div
                   style={{
@@ -146,8 +146,8 @@ function PokemonDetailPage() {
                   }}
                 ></div>
                 <div className="flex justify-between relative z-10">
-                  <span>{stat.name}</span>
-                  <span className="font-bold">{stat.base_stat}</span>
+                  <span className="italic">{stat.name}</span>
+                  <span className="font-bold italic">{stat.base_stat}</span>
                 </div>
               </div>
             );
