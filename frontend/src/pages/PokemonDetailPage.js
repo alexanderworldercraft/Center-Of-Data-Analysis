@@ -2,6 +2,31 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { getPokemonDetails } from "../services/api";
 
+// Fonction pour obtenir la couleur en fonction du type
+function getColor(type) {
+  const colors = new Map([
+    ["bug", "#a6b91a"],
+    ["dark", "#705746"],
+    ["dragon", "#6f35fc"],
+    ["electric", "#f7d02c"],
+    ["fairy", "#d685ad"],
+    ["fighting", "#c22e28"],
+    ["fire", "#ee8130"],
+    ["flying", "#a98ff3"],
+    ["ghost", "#735797"],
+    ["grass", "#7ac74c"],
+    ["ground", "#e2bf65"],
+    ["ice", "#96d9d6"],
+    ["normal", "#a8a77a"],
+    ["poison", "#a33ea1"],
+    ["psychic", "#f95587"],
+    ["rock", "#b6a136"],
+    ["steel", "#b7b7ce"],
+    ["water", "#6390f0"],
+  ]);
+  return colors.get(type) || "#777";
+}
+
 function PokemonDetailPage() {
   const { slug } = useParams(); // Récupérer le slug depuis l'URL
   const [pokemon, setPokemon] = useState(null); // Détails du Pokémon actuel
@@ -84,7 +109,11 @@ function PokemonDetailPage() {
           {pokemon.types?.map((type) => (
             <span
               key={type.slug}
-              className="px-4 py-1 bg-blue-500 text-white rounded-full"
+              className="px-4 py-1 text-white font-bold italic rounded-full"
+              style={{
+                backgroundColor: getColor(type.slug), // Utilisation de la couleur du type
+                boxShadow: `0 0 10px ${getColor(type.slug)}`,
+              }}
             >
               {type.name}
             </span>
@@ -95,26 +124,26 @@ function PokemonDetailPage() {
         <div className="flex gap-2 mt-4">
           <button
             onClick={() => changeImage("normal-male")}
-            className="px-4 py-2 bg-blue-500 text-white border border-black rounded hover:bg-blue-600"
+            className="px-4 py-2 bg-blue-500 text-white border border-black shadow-md rounded hover:bg-blue-600"
           >
             Normal Mâle
           </button>
           <button
             onClick={() => changeImage("normal-female")}
-            className="px-4 py-2 bg-blue-500 text-white border border-black rounded hover:bg-blue-600"
+            className="px-4 py-2 bg-blue-500 text-white border border-black shadow-md rounded hover:bg-blue-600"
             disabled={!pokemon.sprites?.normal?.female}
           >
             Normal Femelle
           </button>
           <button
             onClick={() => changeImage("shiny-male")}
-            className="px-4 py-2 bg-yellow-500 text-white border border-black rounded hover:bg-yellow-600"
+            className="px-4 py-2 bg-yellow-500 text-white border border-black shadow-md rounded hover:bg-yellow-600"
           >
             Shiny Mâle
           </button>
           <button
             onClick={() => changeImage("shiny-female")}
-            className="px-4 py-2 bg-yellow-500 text-white border border-black rounded hover:bg-yellow-600"
+            className="px-4 py-2 bg-yellow-500 text-white border border-black shadow-md rounded hover:bg-yellow-600"
             disabled={!pokemon.sprites?.shiny?.female}
           >
             Shiny Femelle
@@ -160,7 +189,7 @@ function PokemonDetailPage() {
         {previousPokemon && (
           <a
             href={`/pokemon/${previousPokemon.slug}`}
-            className="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            className="px-6 py-2 bg-blue-500 border border-black shadow-md text-white rounded hover:bg-blue-600"
           >
             ← {previousPokemon.name}
           </a>
@@ -168,7 +197,7 @@ function PokemonDetailPage() {
         {nextPokemon && (
           <a
             href={`/pokemon/${nextPokemon.slug}`}
-            className="px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            className="px-6 py-2 bg-blue-500 border border-black shadow-md text-white rounded hover:bg-blue-600"
           >
             {nextPokemon.name} →
           </a>
