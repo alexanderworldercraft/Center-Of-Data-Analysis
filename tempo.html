@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" type="text/css" href="/node_modules/vike-react/dist/integration/styles.css?direct">
+    <link rel="stylesheet" type="text/css" href="/layouts/style.css?direct">
+    <link rel="stylesheet" type="text/css" href="/layouts/tailwind.css?direct">
+    <meta charset="UTF-8" />
+
+    <title>My Vike App</title>
+    <meta property="og:title" content="My Vike App" />
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="icon" href="/assets/logo.svg" />
+
+    <meta name="description" content="Demo showcasing Vike" />
+    <meta property="og:description" content="Demo showcasing Vike" />
+
+
+</head>
+
+<body>
+
+    <div id="root">
+        <div class="flex max-w-5xl m-auto">
+            <div id="sidebar" class="p-5 flex flex-col shrink-0 border-r-2 border-r-gray-200">
+                <div class="p-5 mb-2"><a href="/"><img src="/assets/logo.svg" height="64" width="64" alt="logo" /></a>
+                </div><a href="/" class="is-active">Welcome</a><a href="/todo">Todo</a><a href="/star-wars">Data
+                    Fetching</a>
+            </div>
+            <div id="page-container">
+                <div id="page-content" class="p-5 pb-12 min-h-screen">
+                    <div class="p-4">
+                        <h1 class="text-3xl font-bold text-center mb-4">Liste des Pokémon</h1>
+                        <div class="flex justify-center mb-4"><input type="text" placeholder="Rechercher un Pokémon..."
+                                class="border border-gray-300 rounded p-2" value="" /><select
+                                class="ml-2 border border-gray-300 rounded p-2">
+                                <option value="" selected="">Tous les types</option>
+                                <option value="fire">Feu</option>
+                                <option value="water">Eau</option>
+                                <option value="grass">Plante</option>
+                            </select></div>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script id="vike_pageContext"
+        type="application/json">{"_configFromHook":"!undefined","$$typeof":"!undefined","abortReason":"!undefined","_urlRewrite":null,"_urlRedirect":"!undefined","abortStatusCode":"!undefined","_abortCall":"!undefined","_pageContextInitIsPassedToClient":"!undefined","pageId":"/pages/index","routeParams":{},"data":"!undefined"}</script>
+    <script type="module" async>
+        import RefreshRuntime from "/@react-refresh"
+        RefreshRuntime.injectIntoGlobalHook(window)
+        window.$RefreshReg$ = () => { }
+        window.$RefreshSig$ = () => (type) => type
+        window.__vite_plugin_react_preamble_installed__ = true
+        import "/@vite/client";
+        import "/@fs/home/alexander/Documents/Professionnel/React/Center-Of-Data-Analysis/node_modules/vike/dist/esm/client/client-routing-runtime/entry.js";
+    </script>
+</body>
+
+</html>
