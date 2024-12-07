@@ -170,132 +170,154 @@ function TeamPage() {
       console.warn("Équipe complète !");
       return;
     }
-  
+
     if (team.some((p) => p.slug === pokemon.slug && p.variant === variant)) {
       console.warn(`${pokemon.name} (${variant}) est déjà dans l'équipe.`);
       return;
     }
-  
+
     try {
       console.log(`Récupération des détails pour ${pokemon.name} (${variant})...`);
       const response = await getPokemonDetails(pokemon.slug);
       const stats = response.data.current.stats;
-  
+
       if (!stats || !Array.isArray(stats)) {
         console.warn(`Aucune statistique trouvée pour ${pokemon.name}`);
         return;
       }
-  
+
       console.log(`Statistiques récupérées pour ${pokemon.name}:`, stats);
-  
+
       const selectedPokemon = {
         ...pokemon,
         stats,
         variant,
         sprite: pokemon.sprites[variant.split("-")[0]][variant.split("-")[1]],
       };
-  
+
       setTeam((prevTeam) => [...prevTeam, selectedPokemon]);
       console.log(`Équipe mise à jour:`, [...team, selectedPokemon]);
     } catch (error) {
       console.error(`Erreur lors de la récupération des détails pour ${pokemon.name}:`, error);
     }
-  };   
+  };
 
   const removeFromTeam = (pokemonSlug, variant) => {
     setTeam(team.filter((p) => p.slug !== pokemonSlug || p.variant !== variant));
   };
 
   const [averageStats, setAverageStats] = useState({
-  hp: 0,
-  attack: 0,
-  defense: 0,
-  "special-attack": 0,
-  "special-defense": 0,
-  speed: 0,
-});
+    hp: 0,
+    attack: 0,
+    defense: 0,
+    "special-attack": 0,
+    "special-defense": 0,
+    speed: 0,
+  });
 
-useEffect(() => {
-  const calculateAverageStats = () => {
-    const stats = { hp: 0, attack: 0, defense: 0, "special-attack": 0, "special-defense": 0, speed: 0 };
+  useEffect(() => {
+    const calculateAverageStats = () => {
+      const stats = { hp: 0, attack: 0, defense: 0, "special-attack": 0, "special-defense": 0, speed: 0 };
 
-    if (team.length === 0) return stats;
+      if (team.length === 0) return stats;
 
-    team.forEach((pokemon) => {
-      if (pokemon.stats && Array.isArray(pokemon.stats)) {
-        pokemon.stats.forEach((stat) => {
-          if (stat.slug in stats) {
-            stats[stat.slug] += stat.base_stat;
-          }
-        });
-      }
-    });
+      team.forEach((pokemon) => {
+        if (pokemon.stats && Array.isArray(pokemon.stats)) {
+          pokemon.stats.forEach((stat) => {
+            if (stat.slug in stats) {
+              stats[stat.slug] += stat.base_stat;
+            }
+          });
+        }
+      });
 
-    Object.keys(stats).forEach((key) => {
-      stats[key] = Math.round(stats[key] / team.length);
-    });
+      Object.keys(stats).forEach((key) => {
+        stats[key] = Math.round(stats[key] / team.length);
+      });
 
-    return stats;
+      return stats;
+    };
+
+    setAverageStats(calculateAverageStats());
+  }, [team]);
+
+
+  const radarOptions = {
+    responsive: true,
+    scales: {
+      r: {
+        angleLines: {
+          display: true, // Lignes d'angle visibles
+        },
+        suggestedMin: 0, // Valeur minimale
+        suggestedMax: 255, // Valeur maximale
+        ticks: {
+          stepSize: 50, // Pas entre chaque tick
+          backdropColor: "transparent", // Supprimer le fond derrière les ticks
+        },
+        grid: {
+          color: "rgba(0, 0, 0, 1)", // Couleur des lignes de la grille
+        },
+        pointLabels: {
+          font: {
+            size: 14, // Taille des étiquettes
+            family: "Arial", // Police des étiquettes
+          },
+          color: "#000", // Couleur des étiquettes
+        },
+      },
+    },
+    plugins: {
+      legend: {
+        display: true,
+        labels: {
+          color: "#000", // Couleur des légendes
+        },
+      },
+    },
   };
 
-  setAverageStats(calculateAverageStats());
-}, [team]);
+  const radarData = {
+    labels: ["PV", "Attaque", "Défense", "Attaque Spéciale", "Défense Spéciale", "Vitesse"],
+    datasets: [
+      {
+        label: "Moyenne des statistiques",
+        data: [
+          averageStats.hp,
+          averageStats.attack,
+          averageStats.defense,
+          averageStats["special-attack"],
+          averageStats["special-defense"],
+          averageStats.speed,
+        ],
+        backgroundColor: "rgba(75, 192, 192, 0.2)",
+        borderColor: "rgba(75, 192, 192, 1)",
+        borderWidth: 2,
+      },
+    ],
+  };
+
+  const calculateTeamTypes = () => {
+    const typeCount = {};
+
+    team.forEach((pokemon) => {
+      pokemon.types.forEach(({ slug, name }) => {
+        if (typeCount[slug]) {
+          typeCount[slug].count++;
+        } else {
+          typeCount[slug] = { name, count: 1 };
+        }
+      });
+    });
+
+    return Object.entries(typeCount).map(([slug, { name, count }]) => ({
+      slug, // Pour la couleur
+      name, // Pour l'affichage
+      count,
+    }));
+  };
 
 
-const radarOptions = {
-  responsive: true,
-  scales: {
-    r: {
-      angleLines: {
-        display: true, // Lignes d'angle visibles
-      },
-      suggestedMin: 0, // Valeur minimale
-      suggestedMax: 255, // Valeur maximale
-      ticks: {
-        stepSize: 50, // Pas entre chaque tick
-        backdropColor: "transparent", // Supprimer le fond derrière les ticks
-      },
-      grid: {
-        color: "rgba(0, 0, 0, 1)", // Couleur des lignes de la grille
-      },
-      pointLabels: {
-        font: {
-          size: 14, // Taille des étiquettes
-          family: "Arial", // Police des étiquettes
-        },
-        color: "#000", // Couleur des étiquettes
-      },
-    },
-  },
-  plugins: {
-    legend: {
-      display: true,
-      labels: {
-        color: "#000", // Couleur des légendes
-      },
-    },
-  },
-};
-
-const radarData = {
-  labels: ["PV", "Attaque", "Défense", "Attaque Spéciale", "Défense Spéciale", "Vitesse"],
-  datasets: [
-    {
-      label: "Moyenne des statistiques",
-      data: [
-        averageStats.hp,
-        averageStats.attack,
-        averageStats.defense,
-        averageStats["special-attack"],
-        averageStats["special-defense"],
-        averageStats.speed,
-      ],
-      backgroundColor: "rgba(75, 192, 192, 0.2)",
-      borderColor: "rgba(75, 192, 192, 1)",
-      borderWidth: 2,
-    },
-  ],
-};  
 
   if (loading) {
     return <div class="mt-6 bg-blue-500 text-white font-black w-fit mx-auto flex px-4 py-2 rounded-md shadow-md border-2 border-blue-800">
@@ -409,19 +431,26 @@ const radarData = {
         {/* Équipe actuelle */}
         <div>
           <h2 className="text-2xl font-bold text-white italic drop-shadow mb-4">Votre Équipe</h2>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
             {team.map((pokemon) => (
               <div
                 key={`${pokemon.slug}-${pokemon.variant}`}
-                className="p-4 border rounded-lg shadow hover:bg-gray-100 text-center"
+                className="p-4 group relative border rounded-lg shadow-md bg-black hover:bg-white text-white hover:text-black border-white hover:border-black text-center"
               >
                 <img
                   src={pokemon.sprite || "https://via.placeholder.com/150"}
                   alt={pokemon.name}
                   className="h-16 mx-auto"
                 />
-                <p className="text-gray-700 font-semibold">{pokemon.name}</p>
-                <span className="text-sm text-gray-500">{pokemon.variant.replace("-", " ")}</span>
+                <p className="font-semibold">{pokemon.name}</p>
+                <span className="text-sm absolute top-0 left-0 p-2 border-r border-b rounded-br-md border-white group-hover:border-black">
+                  {pokemon.variant.split("-").map((word, index) => (
+                    <React.Fragment key={index}>
+                      {word}
+                      {index < pokemon.variant.split("-").length - 1 && <br />}
+                    </React.Fragment>
+                  ))}
+                </span>
                 <button
                   onClick={() => removeFromTeam(pokemon.slug, pokemon.variant)}
                   className="mt-2 px-4 py-2 rounded bg-red-500 text-white hover:bg-red-600"
@@ -432,10 +461,33 @@ const radarData = {
             ))}
             {team.length === 0 && <p className="text-gray-500 text-center">Aucun Pokémon dans l'équipe.</p>}
           </div>
-          <div className="mt-8">
-            <h2 className="text-2xl font-bold mb-4 text-center">Moyenne des statistiques de l'équipe</h2>
-            <Radar data={radarData} options={radarOptions} />
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+            <div>
+              <h2 className="text-2xl drop-shadow-md text-white font-bold mb-4 text-center">Moyenne des statistiques de l'équipe</h2>
+              <Radar data={radarData} options={radarOptions} />
+            </div>
+            <div>
+              <h2 className="text-2xl drop-shadow-md text-white font-bold mb-4 text-center">Types de l'équipe</h2>
+              <ul className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {calculateTeamTypes().map(({ slug, name, count }) => (
+                  <li
+                    key={slug}
+                    className=""
+                  >
+                    <p
+                      className="px-4 py-1 text-black font-bold drop-shadow-lg italic rounded-full w-fit my-4 m-auto"
+                      style={{
+                        backgroundColor: getColor(slug), // Utiliser le slug pour la couleur
+                        boxShadow: `0 0 10px ${getColor(slug)}`, // Aura
+                      }}>
+                      {name} {count > 1 ? `x${count}` : ""}
+                    </p>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
+
         </div>
       </div>
     </div>

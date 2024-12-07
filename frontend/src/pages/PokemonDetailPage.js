@@ -113,7 +113,7 @@ function PokemonDetailPage() {
           {pokemon.types?.map((type) => (
             <span
               key={type.slug}
-              className="px-4 py-1 text-white font-bold italic rounded-full"
+              className="px-4 py-1 text-black font-bold italic rounded-full"
               style={{
                 backgroundColor: getColor(type.slug), // Utilisation de la couleur du type
                 boxShadow: `0 0 10px ${getColor(type.slug)}`,
