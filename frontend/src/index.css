@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+/* Barre de scroll page web */
+
+/* Pour la barre de défilement de base elle-même */
+::-webkit-scrollbar {
+    width: 8px;
+    background-color: #000;
+    border-radius: 4px;
+  }
+  
+  /* Pour la "poignée" de la barre de défilement verticale */
+  ::-webkit-scrollbar-thumb {
+    background-color: #dc2626;
+    border-radius: 4px;
+  }

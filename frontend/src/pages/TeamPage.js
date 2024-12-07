@@ -336,7 +336,9 @@ function TeamPage() {
       <h1 className="text-3xl font-bold text-center drop-shadow text-white mb-8">Construisez votre Équipe</h1>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="lg:border-e-2 border-black lg:pe-4">
+        <div 
+        className="lg:border-e-2 border-black lg:pe-4 overflow-auto"
+        style={{height: '848px'}}>
           {/* Recherche et filtre */}
           <div className="flex justify-center items-center gap-4 mb-8">
             <input
@@ -429,7 +431,7 @@ function TeamPage() {
         </div>
 
         {/* Équipe actuelle */}
-        <div>
+        <div className="h-fit">
           <h2 className="text-2xl font-bold text-white italic drop-shadow mb-4">Votre Équipe</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8">
             {team.map((pokemon) => (
@@ -468,7 +470,7 @@ function TeamPage() {
             </div>
             <div>
               <h2 className="text-2xl drop-shadow-md text-white font-bold mb-4 text-center">Types de l'équipe</h2>
-              <ul className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <ul className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                 {calculateTeamTypes().map(({ slug, name, count }) => (
                   <li
                     key={slug}
